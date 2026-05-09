@@ -4,6 +4,9 @@ from typing import List, Dict
 
 
 def read_csv(file: Path) -> List[Dict] :
+    if not file.exists():
+        raise FileNotFoundError(f"File {file} does not exist")
+
     rows = []
 
     with open(file) as csvfile:
