@@ -2,6 +2,8 @@ import csv
 
 import pytest
 
+from app.csv_reader import CsvReader
+from app.exceptions import HeadersError
 from app.main import read_csv
 
 
@@ -52,3 +54,18 @@ def test_read_few_csv(tmp_path):
     assert result[0]["age"] == "10"
     assert result[1]["name"] == "Olga"
     assert result[1]["age"] == "12"
+
+
+def test_read_csv_file_with_invalid_headers_raises_headers_error(tmp_path):
+    test_schema = "test_col, another_test_col"
+    reader = CsvReader(schema=test_schema)
+
+    file = tmp_path / "test.csv"
+
+    with open(file, "w", encoding='utf-8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["name", "age"])
+        writer.writerow(["Ivan", "10"])
+
+    with pytest.raises(HeadersError, match=f'File .+ does not have the correct schema'):
+        reader.read(file)

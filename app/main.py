@@ -10,7 +10,7 @@ def read_csv(*files: str | Path) -> list[dict]:
 
     rows = []
     for file in files:
-        with open(file) as csvfile:
+        with open(file, newline='', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 rows.append(row)
