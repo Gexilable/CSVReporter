@@ -23,3 +23,7 @@ def test_read_non_existent_csv_raises_notfound_exception(tmp_path):
 
     with pytest.raises(FileNotFoundError) as e:
         read_csv(file)
+
+def test_read_csv_raises_type_error_on_invalid_type():
+    with pytest.raises(TypeError) as e:
+        read_csv(123) # type: ignore[arg-type]
