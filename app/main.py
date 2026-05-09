@@ -3,7 +3,8 @@ from pathlib import Path
 from typing import List, Dict
 
 
-def read_csv(file: Path) -> List[Dict] :
+def read_csv(file: str | Path) -> List[Dict]:
+    file = Path(file)
     if not file.exists():
         raise FileNotFoundError(f"File {file} does not exist")
 
