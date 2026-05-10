@@ -5,7 +5,12 @@ from typing import Callable
 @dataclass
 class ReportBuilder:
     data: list
-    sorting_parameter: Callable
+    descending_order: bool = None
+    sorting_parameter: Callable = None
+    filtering_parameter: Callable = None
 
     def build(self):
-        return sorted(self.data, key=self.sorting_parameter, reverse=True)
+        filtered_data = list(filter(self.filtering_parameter, self.data))
+        if self.sorting_parameter:
+            return sorted(filtered_data, key=self.sorting_parameter, reverse=self.descending_order)
+        return filtered_data
