@@ -4,7 +4,13 @@ import pytest
 
 from app.csv_reader import CsvReader
 from app.exceptions import HeadersError
-from app.main import read_csv
+
+test_schema = "test_col, another_test_col"
+reader_with_scheme = CsvReader(schema=test_schema)
+reader_without_scheme = CsvReader()
+
+# TODO Тест на правильную схему,
+#  узнать про __init__.py в app/
 
 
 def test_read_one_csv_return_content(tmp_path):
@@ -14,7 +20,7 @@ def test_read_one_csv_return_content(tmp_path):
         writer.writerow(["name", "age"])
         writer.writerow(["Ivan", "10"])
 
-    result = read_csv(file)
+    result = reader_without_scheme.read(file)
 
     assert result[0]["name"] == "Ivan"
     assert result[0]["age"] == "10"
@@ -24,12 +30,12 @@ def test_read_non_existent_csv_raises_notfound_exception(tmp_path):
     file = tmp_path / "test.csv"
 
     with pytest.raises(FileNotFoundError) as e:
-        read_csv(file)
+        reader_without_scheme.read(file)
 
 
 def test_read_csv_raises_type_error_on_invalid_type():
     with pytest.raises(TypeError) as e:
-        read_csv(123)  # type: ignore[arg-type]
+        reader_without_scheme.read(123)  # type: ignore[arg-type]
 
 
 def test_read_few_csv(tmp_path):
@@ -48,7 +54,7 @@ def test_read_few_csv(tmp_path):
         writer.writerow(["name", "age"])
         writer.writerow(["Olga", "12"])
 
-    result = read_csv(first_file, second_file)
+    result = reader_without_scheme.read(first_file, second_file)
 
     assert result[0]["name"] == "Ivan"
     assert result[0]["age"] == "10"
@@ -57,8 +63,6 @@ def test_read_few_csv(tmp_path):
 
 
 def test_read_csv_file_with_invalid_headers_raises_headers_error(tmp_path):
-    test_schema = "test_col, another_test_col"
-    reader = CsvReader(schema=test_schema)
 
     file = tmp_path / "test.csv"
 
@@ -68,4 +72,4 @@ def test_read_csv_file_with_invalid_headers_raises_headers_error(tmp_path):
         writer.writerow(["Ivan", "10"])
 
     with pytest.raises(HeadersError, match=f'File .+ does not have the correct schema'):
-        reader.read(file)
+        reader_with_scheme.read(file)

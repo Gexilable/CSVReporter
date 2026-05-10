@@ -7,7 +7,7 @@ from app.exceptions import HeadersError
 
 @dataclass
 class CsvReader:
-    schema: str | None
+    schema: str | None = None
 
     def read(self, *files: str | Path):
         for file in files:
@@ -19,8 +19,9 @@ class CsvReader:
         for file in files:
             with open(file, newline='', encoding='utf-8') as csvfile:
                 reader = csv.DictReader(csvfile)
-                if reader.fieldnames is not self.schema:
-                    raise HeadersError(f'File {file} does not have the correct schema')
+                if self.schema:
+                    if reader.fieldnames is not self.schema:
+                        raise HeadersError(f'File {file} does not have the correct schema')
                 for row in reader:
                     rows.append(row)
         return rows
