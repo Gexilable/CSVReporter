@@ -5,12 +5,9 @@ import pytest
 from app.csv_reader import CsvReader
 from app.exceptions import HeadersError
 
-test_schema = "test_col, another_test_col"
+test_schema = ["test_col", "another_test_col"]
 reader_with_scheme = CsvReader(schema=test_schema)
 reader_without_scheme = CsvReader()
-
-# TODO Тест на правильную схему,
-#  узнать про __init__.py в app/
 
 
 def test_read_one_csv_return_content(tmp_path):
@@ -63,7 +60,6 @@ def test_read_few_csv(tmp_path):
 
 
 def test_read_csv_file_with_invalid_headers_raises_headers_error(tmp_path):
-
     file = tmp_path / "test.csv"
 
     with open(file, "w", encoding='utf-8', newline='') as f:
@@ -73,3 +69,17 @@ def test_read_csv_file_with_invalid_headers_raises_headers_error(tmp_path):
 
     with pytest.raises(HeadersError, match=f'File .+ does not have the correct schema'):
         reader_with_scheme.read(file)
+
+
+def test_read_csv_file_with_valid_headers_not_raises_headers_error(tmp_path):
+    file = tmp_path / "test.csv"
+
+    with open(file, "w", encoding='utf-8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["test_col", "another_test_col"])
+        writer.writerow(["Ivan", "10"])
+
+    result = reader_with_scheme.read(file)
+
+    assert result[0]["test_col"] == "Ivan"
+    assert result[0]["another_test_col"] == "10"
