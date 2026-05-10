@@ -1,1 +1,1 @@
-base_shema = ["title", "ctr", "retention_rate", "views", "likes", "avg_watch_time"]
+base_schema = ["title", "ctr", "retention_rate", "views", "likes", "avg_watch_time"]
