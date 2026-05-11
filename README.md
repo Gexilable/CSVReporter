@@ -5,7 +5,7 @@
 ## Установка
 
 ```bash
-uv pip install -e .
+uv sync
 ```
 
 ## Использование
@@ -20,6 +20,8 @@ python main.py --files stats1.csv stats2.csv --report clickbait
 |----------|----------|
 | `--files` | Список CSV-файлов для обработки |
 | `--report` | Тип отчёта (см. `app/report_builders.py`) |
+
+После выполнения отчёт автоматически сохраняется в CSV-файл с именем `{report}_report.csv`.
 
 ### Доступные отчёты
 

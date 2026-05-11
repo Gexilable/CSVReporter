@@ -1,3 +1,4 @@
+import csv
 from dataclasses import dataclass
 from typing import Callable, Optional
 
@@ -14,6 +15,13 @@ class BaseReportBuilder():
         if self.sorting_parameter and self.descending_order:
             return sorted(filtered_data, key=self.sorting_parameter, reverse=self.descending_order)
         return filtered_data
+
+    def save_to_csv(self, filepath: str, fieldnames: list[str]):
+        result = self.build()
+        with open(filepath, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(result)
 
 
 @dataclass

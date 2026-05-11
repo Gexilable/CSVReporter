@@ -22,6 +22,11 @@ data = reader.read(*list_files)
 
 builder = REPORT_BUILDERS[report](data)
 result_report = builder.build()
+
+output_path = f"{report}_report.csv"
+builder.save_to_csv(output_path, base_schema)
+print(f"Report saved to {output_path}")
+
 keys = ["title", "ctr", "retention_rate"]
 pr = Printer(result_report, keys)
 pr.show_report()
