@@ -5,7 +5,7 @@
 ## Установка
 
 ```bash
-pip install -e .
+uv pip install -e .
 ```
 
 ## Использование
@@ -28,7 +28,7 @@ python main.py --files stats1.csv stats2.csv --report clickbait
 ## Тестирование
 
 ```bash
-pytest
+uv run pytest
 ```
 
 ## Расширение
