@@ -21,6 +21,8 @@ python main.py --files stats1.csv stats2.csv --report clickbait
 | `--files` | Список CSV-файлов для обработки |
 | `--report` | Тип отчёта (см. `app/report_builders.py`) |
 
+После выполнения отчёт автоматически сохраняется в CSV-файл с именем `{report}_report.csv`.
+
 ### Доступные отчёты
 
 - `clickbait` — видео с высоким CTR (>15%) и низким удержанием (<40%), отсортированные по CTR
